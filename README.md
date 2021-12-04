@@ -1,43 +1,27 @@
 # pytorch_template
-A pytorch temple folder for deep learning project.
+A pytorch temple folder for your deep learning project.
 
-pytorch-template/
-│
-├── train.py - main script to start training
-├── test.py - evaluation of trained model
-│
-├── config.json - holds configuration for training
-├── parse_config.py - class to handle config file and cli options
-│
-├── new_project.py - initialize new project with template files
-│
-├── base/ - abstract base classes
-│   ├── base_data_loader.py
-│   ├── base_model.py
-│   └── base_trainer.py
-│
-├── data_loader/ - anything about data loading goes here
-│   └── data_loaders.py
-│
-├── data/ - default directory for storing input data
-│
-├── model/ - models, losses, and metrics
-│   ├── model.py
-│   ├── metric.py
-│   └── loss.py
-│
-├── saved/
-│   ├── models/ - trained models are saved here
-│   └── log/ - default logdir for tensorboard and logging output
-│
-├── trainer/ - trainers
-│   └── trainer.py
-│
-├── logger/ - module for tensorboard visualization and logging
-│   ├── visualization.py
-│   ├── logger.py
-│   └── logger_config.json
-│  
-└── utils/ - small utility functions
-    ├── util.py
-    └── ...
+## Requirements
+- Python >= 3.8.0
+- PyTorch >= 1.10
+
+## Folder Structure
+```
+📦pytorch_template
+ ┣ 📂config
+ ┃ ┗ 📜config.yaml - configuration for model initialization and training setup
+ ┣ 📂dataloader - load dataset in batch 
+ ┃ ┣ 📜image_loader.py 
+ ┃ ┗ 📜pointclouds_loader.py
+ ┣ 📂experiment
+ ┃ ┗ 📜eval.ipynb - jupyter notebook for model eval and showing experiment results
+ ┣ 📂model
+ ┃ ┣ 📜loss.py - custom model loss function 
+ ┃ ┗ 📜net.py - base model/neural netowrk class
+ ┣ 📂save
+ ┃ ┗ 📜checkpoint.pth - saved model checkpoint
+ ┣ 📂utils
+ ┃ ┣ 📜metric.py - model evaluation metrics
+ ┃ ┗ 📜pytorchtools.py - early stopping class for model training
+ ┗ 📜trainval.py - main script to start model training & validation
+```
