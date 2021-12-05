@@ -65,8 +65,8 @@ if __name__ == "__main__":
 
     train_loader = DataLoader(training_data, batch_size=3, shuffle=True)
     test_loader = DataLoader(testing_data, batch_size=3, shuffle=True)
-    
-    model, criterion, optimizer = build_model(CNN())
+
+    model, criterion, optimizer = build_model(CNN(in_channels=1, out_channels=10))
 
     for epoch in range(1, EPOCH+1):
         # Training & Validation
