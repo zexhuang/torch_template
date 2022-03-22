@@ -52,13 +52,13 @@ if __name__ == "__main__":
 
     # Image Dataset
     training_data = datasets.MNIST(
-        root='/media/ubuntu/dataset/',
+        root='../dataset/',
         train=True,
         download=True,
         transform=ToTensor())
 
     testing_data = datasets.MNIST(
-        root='/media/ubuntu/dataset/',
+        root='../dataset/',
         train=False,
         download=True,
         transform=ToTensor())
