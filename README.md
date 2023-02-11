@@ -1,13 +1,16 @@
 # pytorch_template
+
 A pytorch temple folder for your deep learning project.
 
 ## Requirements
+
 - Python >= 3.8.0
 - PyTorch >= 1.10
 - CUDA >= 11.3 (Optional)
 
 ## Folder Structure
-```
+
+```txt
 📦pytorch_template
  ┣ 📂config
  ┃ ┗ 📜config.yaml - configuration for model initialization and training setup
