@@ -1,6 +1,6 @@
 # pytorch_template
 
-A pytorch temple folder for your deep learning project.
+A simple pytorch temple folder for your deep learning project.
 
 ## Requirements
 
@@ -12,18 +12,19 @@ A pytorch temple folder for your deep learning project.
 
 ```txt
 📦pytorch_template
- ┣ 📂config
- ┃ ┗ 📜config.yaml - configuration for model initialization and training setup
- ┣ 📂dataloader - load dataset in batch 
- ┃ ┣ 📜image_loader.py 
- ┃ ┗ 📜pointclouds_loader.py
- ┣ 📂experiment
+ ┣ 📂cfg
+ ┃ ┗ 📜cfg.yaml - configuration for model initialization and training setup
+ ┣ 📂data  
+ ┃ ┗ 📜dataset.py - dataset loaders
+ ┣ 📂exp
  ┃ ┗ 📜eval.ipynb - jupyter notebook for model eval and showing experiment results
  ┣ 📂model
  ┃ ┣ 📜loss.py - custom model loss function 
  ┃ ┗ 📜net.py - base model/neural netowrk class
  ┣ 📂save
- ┃ ┗ 📜checkpoint.pth - saved model checkpoint
+ ┃ ┗ ckpt.pth - model checkpoint
+ ┣ 📂train
+ ┃ ┗ trainer.py - a simple trainer script following torch lightning trainer module
  ┣ 📂utils
  ┃ ┣ 📜metric.py - model evaluation metrics
  ┃ ┗ 📜pytorchtools.py - early stopping class for model training
