@@ -1,0 +1,27 @@
+name: torch
+channels:
+  - defaults
+  - conda-forge
+  - pytorch3d
+dependencies:
+  - python=3.9
+  - torchvision
+  - cudatoolkit=11.6
+  - pytorch
+  - pytorch3d
+  - torchinfo
+  - tensorboard
+  - ipykernel
+  - mamba
+  - seaborn
+  - rasterio
+  - shapely
+  - pandas
+  - geopandas
+  - scipy
+  - scikit-learn
+  - gudhi
+  - pip:
+    - torch_geometric 
+    - torch_topological
+prefix: /home/ubuntu/anaconda3/envs/torch
