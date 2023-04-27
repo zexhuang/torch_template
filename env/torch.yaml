@@ -10,6 +10,7 @@ dependencies:
   - pytorch
   - pytorch3d
   - torchinfo
+  - torchmetrics
   - tensorboard
   - ipykernel
   - mamba
