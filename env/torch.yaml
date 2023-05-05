@@ -3,23 +3,23 @@ channels:
   - defaults
   - conda-forge
   - pytorch3d
+  - nvidia
   - pyg
 dependencies:
   - python=3.9
+  - mamba
   - pyg 
-  - pytorch-cluster
   - pytorch-scatter
+  - pytorch-cluster
   - pytorch-sparse
-  - torch-spline-conv
   - torchvision
   - cudatoolkit=11.6
-  - pytorch
+  - pytorch==1.13.1
   - pytorch3d
   - torchinfo
   - torchmetrics
   - tensorboard
   - ipykernel
-  - mamba
   - seaborn
   - rasterio
   - shapely
@@ -28,6 +28,8 @@ dependencies:
   - scipy
   - scikit-learn
   - gudhi
+  - gdal
+  - pdal
   - pip:
     - torch_topological
 prefix: /home/ubuntu/anaconda3/envs/torch
