@@ -13,7 +13,7 @@ dependencies:
   - pytorch-cluster
   - pytorch-sparse
   - torchvision
-  - pytorch-cuda=11.6
+  - pytorch-cuda==11.6
   - pytorch==1.13.1
   - pytorch3d
   - torchinfo
