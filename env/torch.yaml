@@ -25,6 +25,7 @@ dependencies:
   - scikit-learn
   - seaborn
   - rasterio
+  - h5py
   - shapely
   - pandas
   - geopandas
