@@ -19,7 +19,6 @@ dependencies:
   - pytorch3d::pytorch3d
   - torchinfo
   - torchmetrics
-  - tensorboard
   - ipykernel
   - scipy
   - scikit-learn
@@ -34,5 +33,6 @@ dependencies:
   - mamba
   - pip
   - pip:
+    - tensorboard
     - torch_topological
     - h5py
