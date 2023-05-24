@@ -1,35 +1,37 @@
 name: torch
 channels:
-  - defaults
-  - conda-forge
-  - pytorch3d
   - nvidia
+  - pytorch
   - pyg
-dependencies:
-  - python=3.9
-  - mamba
-  - pyg 
-  - pytorch-scatter
-  - pytorch-cluster
-  - pytorch-sparse
-  - torchvision
-  - pytorch-cuda==11.6
-  - pytorch==1.13.1
   - pytorch3d
+  - conda-forge
+dependencies:
+  - nvidia::cudatoolkit=11.6
+  - python=3.9
+  - pytorch::pytorch==1.13.1
+  - pytorch::torchvision
+  - pytorch::torchaudio
+  - pyg::pyg 
+  - pyg::pytorch-scatter
+  - pyg::pytorch-cluster
+  - pyg::pytorch-sparse
+  - pyg::pytorch-spline-conv
+  - pytorch3d::pytorch3d
   - torchinfo
   - torchmetrics
   - tensorboard
   - ipykernel
+  - scipy
+  - scikit-learn
   - seaborn
   - rasterio
   - shapely
   - pandas
   - geopandas
-  - scipy
-  - scikit-learn
   - gudhi
   - gdal
   - pdal
+  - mamba
+  - pip
   - pip:
     - torch_topological
-prefix: /home/ubuntu/anaconda3/envs/torch
