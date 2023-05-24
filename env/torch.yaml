@@ -25,7 +25,6 @@ dependencies:
   - scikit-learn
   - seaborn
   - rasterio
-  - h5py
   - shapely
   - pandas
   - geopandas
@@ -36,3 +35,4 @@ dependencies:
   - pip
   - pip:
     - torch_topological
+    - h5py
