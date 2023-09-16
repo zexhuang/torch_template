@@ -31,6 +31,9 @@ dependencies:
   - gemgis
   - gdal
   - pdal
+  - python-pdal
+  - raster
+  - rio_tiler
   - plyfile
   - mamba
   - cmake
