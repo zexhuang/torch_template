@@ -23,17 +23,17 @@ dependencies:
   - scipy
   - scikit-learn
   - seaborn
-  - rasterio
-  - shapely
   - pandas
   - geopandas
+  - shapely
   - pyvista
   - gemgis
   - gdal
   - pdal
   - python-pdal
-  - raster
-  - rio_tiler
+  - rasterio
+  - rioxarray
+  - rio-tiler
   - plyfile
   - mamba
   - cmake
