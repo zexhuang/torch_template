@@ -27,12 +27,16 @@ dependencies:
   - shapely
   - pandas
   - geopandas
-  - gudhi
+  - pyvista
+  - gemgis
   - gdal
   - pdal
+  - plyfile
   - mamba
+  - cmake
+  - pyyaml
   - pip
   - pip:
     - tensorboard
-    - torch_topological
     - h5py
+    - pylas
