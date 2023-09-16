@@ -39,4 +39,4 @@ dependencies:
   - pip:
     - tensorboard
     - h5py
-    - pylas
+    - laspy
