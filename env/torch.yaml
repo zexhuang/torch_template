@@ -6,11 +6,11 @@ channels:
   - pytorch3d
   - conda-forge
 dependencies:
-  - nvidia::cudatoolkit=11.6
   - python=3.9
-  - pytorch::pytorch==1.13.1
+  - pytorch::pytorch
   - pytorch::torchvision
   - pytorch::torchaudio
+  - pytorch::pytorch-cuda=12.1
   - pyg::pyg 
   - pyg::pytorch-scatter
   - pyg::pytorch-cluster
@@ -42,4 +42,5 @@ dependencies:
   - pip:
     - tensorboard
     - h5py
+    - freetype-py
     - laspy
