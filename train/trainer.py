@@ -28,7 +28,6 @@ class Trainer:
         self.patience = self.cfg['patience']
         self.lr = self.cfg['lr']
         self.w_decay = self.cfg['w_decay']
-        self.num_cls = self.cfg['num_cls']
         self.device = self.cfg['device']
             
     def fit(self, 
