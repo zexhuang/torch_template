@@ -109,7 +109,7 @@ class Trainer:
              metric: Optional[Dict[str, Metric]]=None,
              ckpt: Union[str, Path, None]=None,
              verbose: bool=False):
-        model.load_state_dict(self._load_ckpt(ckpt, self.device)['params']) if ckpt else model  
+        model.load_state_dict(self._load_ckpt(ckpt, self.device)['model_state_dict']) if ckpt else model  
         
         if metric is None:
             metric = {'OA': BinaryAccuracy(), 
