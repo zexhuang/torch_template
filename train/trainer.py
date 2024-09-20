@@ -1,15 +1,18 @@
 import yaml
-import logging
 import torch
 
+from tqdm import tqdm
 from pathlib import Path
-from typing import Union, Optional, Callable
-from torch.utils.tensorboard import SummaryWriter
+from typing import Union, Optional, Callable, Dict
+
 from torch_geometric.loader import DataLoader
 from torch_geometric.nn import MessagePassing
-from torchinfo import summary
+
+from torch.utils.tensorboard import SummaryWriter
 from utils.torch_tools import EarlyStopping
-from utils.metric import Metrics
+from torchmetrics import Metric
+from torchmetrics.classification import BinaryAccuracy, BinaryJaccardIndex
+from torchinfo import summary
 
 
 class Trainer:
@@ -26,59 +29,64 @@ class Trainer:
         self.lr = self.cfg['lr']
         self.w_decay = self.cfg['w_decay']
         self.num_cls = self.cfg['num_cls']
-        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        self.device = self.cfg['device']
             
-    def fit(self, model: Union[torch.nn.Module, MessagePassing],  
+    def fit(self, 
+            model: Union[torch.nn.Module, MessagePassing],  
             criterion: Optional[Callable]=None,  
             optimizer: Optional[torch.optim.Optimizer]=None, 
             train_loader: Optional[DataLoader]=None,
             val_loader: Optional[DataLoader]=None,
             ckpt: Union[str, Path, None]=None,
-            save_period: int=25,
+            save_period: int=10,
             writer: Optional[object]=None, 
             early_stop: bool=False):
-        summary(model)
+        summary(model, depth=100)
+        
+        model.to(self.device)  
         model.load_state_dict(self._load_ckpt(ckpt)['params']) if ckpt else model  
+        
         criterion = torch.nn.CrossEntropyLoss() if criterion == None else criterion
+        
         if not optimizer: optimizer = torch.optim.Adam(model.parameters(), 
                                                        lr=self.lr, 
                                                        weight_decay=self.w_decay) 
+        
         lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingWarmRestarts(optimizer, 
                                                                             T_0=self.epoch, 
                                                                             T_mult=1,
-                                                                            eta_min=1e-6,
-                                                                            verbose=True)
+                                                                            eta_min=1e-6)
+        lr_scheduler.get_last_lr()
+        
         writer = SummaryWriter(log_dir=f'{self.path}/runs') if writer == None else writer
-        if early_stop: early_stopping = EarlyStopping(patience=self.patience)
+        
+        if early_stop: early_stopping = EarlyStopping(path=self.path, patience=self.patience)
          
-        for ep in range(1, self.epoch+1):
+        for ep in tqdm(range(1, self.epoch+1)):
             t_ls = self._fit_impl(model, optimizer, criterion, train_loader)
             writer.add_scalar('Loss/train', t_ls, ep)
-            v_ls = self._val_impl(model, criterion, val_loader) 
-            writer.add_scalar('Loss/val', v_ls, ep)
+            
             # Adjust learning rate 
             lr_scheduler.step()
             writer.add_scalar('LRate/train', lr_scheduler.get_last_lr()[0], ep)
             
-            if early_stop:
-                early_stopping(v_ls.item()) # accpet float type
-                if early_stopping.counter == 0: 
-                    self._save_ckpt(model, ckpt_name=f'best_at_epoch{ep}')
-                if early_stopping.stop: break
-                
             if ep % save_period == 0: # save model at every n epoch
-                self._save_ckpt(model, ckpt_name=f'epoch{ep}')
+                if val_loader:
+                    v_ls = self._val_impl(model, criterion, val_loader) 
+                    writer.add_scalar('Loss/val', v_ls, ep)
+                    
+                    if early_stop:
+                        early_stopping(v_ls.item(), model, optimizer, ep, lr_scheduler.get_last_lr()) # accpet float type
+                        if early_stopping.early_stop: break
             
     def _fit_impl(self, model, optimizer, criterion, dataloader):
         model.train()
-        model.to(self.device)
         ls = 0.0
-        for data in dataloader:
+        for _, data in enumerate(dataloader):
             optimizer.zero_grad()         # Clear gradients
-            data.to(torch.device(self.device))
+            data.to(self.device)
             logits = model(data) 
-            y = data['y'].to(torch.device(self.device), dtype=torch.long)
-            loss = criterion(logits, y)   # Compute gradients
+            loss = criterion(logits, data['y'])   # Compute gradients
             loss.backward()               # Backward pass 
             optimizer.step()              # Update model parameters                                                       
             # Loss dim reduction="mean"
@@ -87,41 +95,53 @@ class Trainer:
     
     def _val_impl(self, model, criterion, dataloader):
         model.eval()
-        model.to(self.device)
         ls = 0.0
-        for data in dataloader:
-            data.to(torch.device(self.device))
+        for _, data in enumerate(dataloader):
+            data.to(self.device)
             logits = model(data) 
-            y = data['y'].to(torch.device(self.device), dtype=torch.long)
-            loss = criterion(logits, y)   
+            loss = criterion(logits, data['y'])   
             ls += len(data) * loss.detach().clone()
         return ls / len(dataloader.dataset)
-
-    def predict(self, model: Union[torch.nn.Module, MessagePassing], 
-                dataloader: Optional[DataLoader]=None, 
-                metric: Optional[Callable]=None,
-                ckpt: Union[str, Path, None]=None):
-        model.load_state_dict(self._load_ckpt(ckpt)['params']) if ckpt else model  
-        metric = Metrics(self.num_cls) if metric == None else metric
-        return self._pred_impl(model, metric, dataloader), model
     
-    def _pred_impl(self, model, metric, dataloader):
+    def eval(self, 
+             model: Union[torch.nn.Module, MessagePassing], 
+             dataloader: Optional[DataLoader]=None, 
+             metric: Optional[Dict[str, Metric]]=None,
+             ckpt: Union[str, Path, None]=None,
+             verbose: bool=False):
+        model.load_state_dict(self._load_ckpt(ckpt, self.device)['params']) if ckpt else model  
+        
+        if metric is None:
+            metric = {'OA': BinaryAccuracy(), 
+                      'mIoU': BinaryJaccardIndex()}
+
+        metric = self._eval_impl(model, metric, dataloader)
+        
+        if verbose:
+            for name, cm in metric.items(): print(f"{name}: {cm.compute().cpu().numpy().tolist()}")    
+        return metric
+    
+    def _eval_impl(self, model, metric, dataloader):
+        model.to(self.device)
+        
+        for name, cm in metric.items(): 
+            cm.to(self.device)
+        
+        model.eval()
+        for data in dataloader:
+            data.to(self.device)
+            logits = model(data) 
+            for name, cm in metric.items():
+                cm.update(logits, data['y'])
+        return metric 
+    
+    def load_weights(self, model: torch.nn.Module, ckpt: Union[str, Path]):
+        if isinstance(ckpt, str): ckpt = Path(ckpt)
+        model.load_state_dict(self._load_ckpt(ckpt, self.device)['model_state_dict']) 
         model.eval()
         model.to(self.device)
-        for data in dataloader:
-            data.to(torch.device(self.device))
-            logits = model(data) 
-            y = data['y'].to(torch.device(self.device), dtype=torch.long)
-            metric.update(logits, y)
-        return metric  
+        return model
     
-    def _save_ckpt(self, model, ckpt_name):
+    def _load_ckpt(self, ckpt_name, device):
         path = Path(self.path) / 'ckpt'
-        path.mkdir(parents=True, exist_ok=True)
-        
-        torch.save({'params':model.state_dict()}, path.joinpath(ckpt_name))
-        logging.info('model ckpt is saved.')
-    
-    def _load_ckpt(self, ckpt_name):
-        path = Path(self.path) / 'ckpt'
-        return torch.load(path.joinpath(ckpt_name)) # {'params': Tensor}
+        return torch.load(path.joinpath(ckpt_name), map_location=device)
