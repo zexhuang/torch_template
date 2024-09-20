@@ -56,7 +56,6 @@ class Trainer:
                                                                             T_0=self.epoch, 
                                                                             T_mult=1,
                                                                             eta_min=1e-6)
-        lr_scheduler.get_last_lr()
         
         writer = SummaryWriter(log_dir=f'{self.path}/runs') if writer == None else writer
         
@@ -110,10 +109,14 @@ class Trainer:
              ckpt: Union[str, Path, None]=None,
              verbose: bool=False):
         model.load_state_dict(self._load_ckpt(ckpt, self.device)['model_state_dict']) if ckpt else model  
+        model.to(self.device)
         
         if metric is None:
             metric = {'OA': BinaryAccuracy(), 
                       'mIoU': BinaryJaccardIndex()}
+            
+        for name, cm in metric.items(): 
+            cm.to(self.device)
 
         metric = self._eval_impl(model, metric, dataloader)
         
@@ -122,11 +125,6 @@ class Trainer:
         return metric
     
     def _eval_impl(self, model, metric, dataloader):
-        model.to(self.device)
-        
-        for name, cm in metric.items(): 
-            cm.to(self.device)
-        
         model.eval()
         for data in dataloader:
             data.to(self.device)

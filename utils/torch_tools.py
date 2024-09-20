@@ -47,7 +47,7 @@ class EarlyStopping:
             self.save_checkpoint(checkpoint, score)
         elif score > self.best_score + self.delta:
             self.counter += 1
-            self.trace_func(f'Validation loss does not imporove ({self.best_score} --> {score}). \n EarlyStopping counter: {self.counter} out of {self.patience}')
+            self.trace_func(f'\n Validation loss does not imporove ({self.best_score} --> {score}). \n EarlyStopping counter: {self.counter} out of {self.patience}')
             if self.counter >= self.patience:
                 self.early_stop = True
         else:
@@ -58,7 +58,7 @@ class EarlyStopping:
     def save_checkpoint(self, checkpoint, loss):
         '''Saves model when validation loss decrease.'''
         if self.verbose:
-            self.trace_func(f'Validation loss decrease ({self.best_score:.6f} --> {loss:.6f}). \n Saving model ...')
+            self.trace_func(f'\n Validation loss decrease ({self.best_score:.6f} --> {loss:.6f}). \n Saving model ...')
             
         checkpoint_path = self.path / 'ckpt'
         checkpoint_path.mkdir(parents=True, exist_ok=True)
