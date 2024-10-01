@@ -44,3 +44,4 @@ dependencies:
     - h5py
     - freetype-py
     - laspy
+    - torch-points3d
