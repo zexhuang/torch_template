@@ -38,6 +38,7 @@ dependencies:
   - mamba
   - cmake
   - pyyaml
+  - numba
   - gudhi
   - pip
   - pip:
