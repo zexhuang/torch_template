@@ -49,3 +49,4 @@ dependencies:
     - torch_topological
     - giotto-tda
     - tadasets
+    - torch-points3d
