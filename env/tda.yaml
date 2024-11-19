@@ -7,6 +7,7 @@ channels:
   - conda-forge
 dependencies:
   - python=3.9
+  - ipykernel
   - pytorch::pytorch
   - pytorch::torchvision
   - pytorch::torchaudio
@@ -19,32 +20,21 @@ dependencies:
   - pytorch3d::pytorch3d
   - torchinfo
   - torchmetrics
-  - ipykernel
+  - tensorboard
+  - numba
   - scipy
   - scikit-learn
   - seaborn
+  - gdal
+  - pdal
+  - python-pdal
   - pandas
   - geopandas
   - shapely
   - pyvista
-  - gemgis
-  - gdal
-  - pdal
-  - python-pdal
-  - rasterio
-  - rioxarray
-  - rio-tiler
-  - plyfile
-  - mamba
-  - cmake
-  - pyyaml
   - gudhi
   - pip
   - pip:
-    - tensorboard
-    - h5py
-    - laspy
-    - freetype-py
     - ripserplusplus
     - torch_topological
     - giotto-tda

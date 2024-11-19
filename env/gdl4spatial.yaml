@@ -1,4 +1,4 @@
-name: torch
+name: gdl4spatial
 channels:
   - nvidia
   - pytorch
@@ -7,6 +7,7 @@ channels:
   - conda-forge
 dependencies:
   - python=3.9
+  - ipykernel
   - pytorch::pytorch
   - pytorch::torchvision
   - pytorch::torchaudio
@@ -19,28 +20,25 @@ dependencies:
   - pytorch3d::pytorch3d
   - torchinfo
   - torchmetrics
-  - ipykernel
+  - tensorboard
+  - numba
   - scipy
   - scikit-learn
   - seaborn
-  - pandas
-  - geopandas
-  - shapely
-  - pyvista
-  - gemgis
   - gdal
   - pdal
   - python-pdal
+  - pandas
+  - geopandas
+  - shapely
   - rasterio
   - rioxarray
   - rio-tiler
-  - plyfile
-  - mamba
+  - gemgis
+  - pyvista
   - cmake
   - pyyaml
-  - pip
-  - pip:
-    - tensorboard
-    - h5py
-    - freetype-py
-    - laspy
+  - plyfile
+  - laspy
+  - lazrs-python
+  - h5py
