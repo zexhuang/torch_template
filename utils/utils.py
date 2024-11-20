@@ -1,4 +1,3 @@
-import numpy as np
 import torch
 from pathlib import Path
 
@@ -33,11 +32,14 @@ class EarlyStopping:
     def __call__(self, loss, model, optimizer, epoch, last_lr, cm=None):
         score = loss 
         
+        model_state = model.state_dict()
+        optimizer_state = optimizer.state_dict()
+        
         checkpoint = {
             'epoch': epoch,
             'loss': loss,
-            'model_state_dict': model.state_dict(),
-            'optimizer_state_dict': optimizer.state_dict(),
+            'model_state_dict': model_state,
+            'optimizer_state_dict': optimizer_state,
             'lr': last_lr[0],
             'confusion_matrix': cm
         }
@@ -62,6 +64,6 @@ class EarlyStopping:
             
         checkpoint_path = self.path / 'ckpt'
         checkpoint_path.mkdir(parents=True, exist_ok=True)
-        torch.save(checkpoint, checkpoint_path.joinpath(f"epoch{checkpoint['epoch']}.pth"))
+        torch.save(checkpoint, checkpoint_path.joinpath('best_val_epoch.pth'))
         
         self.best_score = loss

@@ -36,6 +36,8 @@ class Trainer:
             'F1Score': F1Score(task='binary', threshold=0.5).to(self.cfg['device']),
             'mIoU': JaccardIndex(task='binary', threshold=0.5).to(self.cfg['device'])
         }
+        
+        self.set_seed()
 
     def fit(self, model: torch.nn.Module, 
             criterion: Optional[Callable]=None,  
@@ -48,7 +50,7 @@ class Trainer:
         model = model.to(self.cfg['device'])
         
         if ckpt:
-            model.load_state_dict(self._load_ckpt(ckpt)['params'])
+            model.load_state_dict(self._load_ckpt(ckpt)['model_state_dict'])
         
         criterion = criterion or torch.nn.CrossEntropyLoss()
 
@@ -143,7 +145,7 @@ class Trainer:
         model = model.to(self.cfg['device'])
         
         if ckpt:
-            model.load_state_dict(self._load_ckpt(ckpt)['params'])
+            model.load_state_dict(self._load_ckpt(ckpt)['model_state_dict'])
             
         criterion = criterion or torch.nn.CrossEntropyLoss()
 
@@ -174,20 +176,27 @@ class Trainer:
     
     def load_weights(self, model: torch.nn.Module, ckpt: Union[str, Path]):
         if isinstance(ckpt, str): ckpt = Path(ckpt)
-        model.load_state_dict(self._load_ckpt(ckpt)['params']) 
+        model.load_state_dict(self._load_ckpt(ckpt)['model_state_dict']) 
         model.eval()
         model.to(self.cfg['device'])
         return model
+    
+    def set_seed(self, seed = 3407):
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)  # For multi-GPU setups
+        torch.backends.cudnn.deterministic = True  # Ensures deterministic behavior
+        torch.backends.cudnn.benchmark = False  # Disables optimization for reproducibility
         
     def _save_ckpt(self, model, ckpt_name):
         ckpt_path = Path(self.path) / 'ckpt'
         ckpt_path.mkdir(parents=True, exist_ok=True)
-        torch.save({'params': model.state_dict()}, ckpt_path / ckpt_name)
+        torch.save({'model_state_dict': model.state_dict()}, ckpt_path / ckpt_name)
         logging.info(f'Model checkpoint saved at {ckpt_path / ckpt_name}')
         
     def _load_ckpt(self, ckpt_name):
         ckpt_path = Path(self.path) / 'ckpt' / ckpt_name 
-        return torch.load(ckpt_path) # {'params': Tensor}
+        return torch.load(ckpt_path)
     
     def _update_metrics(self, pred, target):
         for metric in self.metrics.values():
