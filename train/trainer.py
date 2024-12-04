@@ -50,7 +50,7 @@ class Trainer:
         model = model.to(self.cfg['device'])
         
         if ckpt:
-            model.load_state_dict(self._load_ckpt(ckpt)['model_state_dict'])
+            model.load_state_dict(self._load_ckpt(ckpt)['model_state_dict'], strict=False)
         
         criterion = criterion or torch.nn.CrossEntropyLoss()
 
@@ -108,7 +108,7 @@ class Trainer:
             label, input = data['label'].to(self.cfg['device']), data['input'].to(self.cfg['device'])
             optimizer.zero_grad()         # Clear gradients
             out = model(input)
-            loss = criterion(out, label)   # Compute gradients
+            loss = criterion(out, label)  # Compute gradients
             loss.backward()               # Backward pass 
             optimizer.step()              # Update model parameters                                                       
             
@@ -141,7 +141,6 @@ class Trainer:
              dataloader: Optional[DataLoader]=None, 
              ckpt: Union[str, Path, None]=None,
              verbose: bool=False):
-        summary(model)
         model = model.to(self.cfg['device'])
         
         if ckpt:
@@ -152,10 +151,13 @@ class Trainer:
         e_loss, e_mcs = self._eval_impl(model, criterion, dataloader) 
         
         if verbose:
-            print('Loss/eval', f"{e_loss:.2f}", end=' -- ')
+            summary(model)
             
+            print('Loss/eval', f"{e_loss:.2f}", end=' -- ')
             for mc_name, mc_value in e_mcs.items():
                 print(mc_name+'/eval', f"{mc_value * 100:.2f}", end=' -- ')
+                
+        return e_mcs
 
     def _eval_impl(self, model, criterion, dataloader):
         model.eval()
@@ -176,7 +178,7 @@ class Trainer:
     
     def load_weights(self, model: torch.nn.Module, ckpt: Union[str, Path]):
         if isinstance(ckpt, str): ckpt = Path(ckpt)
-        model.load_state_dict(self._load_ckpt(ckpt)['model_state_dict']) 
+        model.load_state_dict(self._load_ckpt(ckpt)['model_state_dict'], strict=False) 
         model.eval()
         model.to(self.cfg['device'])
         return model
