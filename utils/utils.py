@@ -49,7 +49,7 @@ class EarlyStopping:
             self.save_checkpoint(checkpoint, score)
         elif score > self.best_score + self.delta:
             self.counter += 1
-            self.trace_func(f'\n Validation loss does not imporove ({self.best_score} --> {score}). \n EarlyStopping counter: {self.counter} out of {self.patience}')
+            self.trace_func(f'\n Validation loss does not improve ({self.best_score} --> {score}). \n EarlyStopping counter: {self.counter} out of {self.patience}')
             if self.counter >= self.patience:
                 self.early_stop = True
         else:
