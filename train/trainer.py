@@ -14,6 +14,8 @@ from torchmetrics.classification import BinaryAccuracy, BinaryJaccardIndex
 from torchinfo import summary
 from tqdm import tqdm
 
+from utils.utils import EarlyStopping
+
 
 class BaseTrainer:
     def __init__(self, cfg: Union[str, Path, dict]):
