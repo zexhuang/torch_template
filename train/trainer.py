@@ -87,13 +87,13 @@ class Trainer(BaseTrainer):
         early_stopping = EarlyStopping(path=self.path, patience=self.patience)
 
         for ep in tqdm(range(1, self.epoch + 1)):
-            train_loss = self._train_one_epoch(model, optimizer, criterion, train_loader)
+            train_loss = self._train_one_epoch(model, optimizer, criterion, train_loader, self.device)
             self.writer.add_scalar('Loss/train', train_loss, ep)
             self.writer.add_scalar('LRate/train', lr_scheduler.get_last_lr()[0], ep)
             lr_scheduler.step()
             
             if val_loader:
-                val_loss = self._evaluate(model, criterion, val_loader)
+                val_loss = self._evaluate(model, criterion, val_loader, self.device)
                 self.writer.add_scalar('Loss/val', val_loss, ep)
 
                 if ep % save_period == 0:
@@ -102,8 +102,8 @@ class Trainer(BaseTrainer):
                         logging.info(f"Early stopping at epoch {ep}.")
                         break
 
-    def _train_one_epoch(self, model, optimizer, criterion, dataloader):
-        model.train().to(self.device)
+    def _train_one_epoch(self, model, optimizer, criterion, dataloader, device):
+        model.train().to(device)
         total_loss = 0.0
 
         for data in dataloader:
@@ -117,8 +117,8 @@ class Trainer(BaseTrainer):
 
         return total_loss / len(dataloader.dataset)
 
-    def _evaluate(self, model, criterion, dataloader):
-        model.eval().to('cpu')
+    def _evaluate(self, model, criterion, dataloader, device):
+        model.eval().to(device)
         total_loss = 0.0
 
         with torch.no_grad():
