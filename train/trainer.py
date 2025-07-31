@@ -75,7 +75,7 @@ class Trainer(BaseTrainer):
             ckpt: Union[str, Path, None] = None,
             save_period: int = 10):
 
-        summary(model, depth=100)
+        summary(model, depth=3)
         if ckpt:
             model.load_state_dict(self._load_ckpt(ckpt, self.device)['params'])
 
