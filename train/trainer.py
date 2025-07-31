@@ -91,17 +91,16 @@ class Trainer(BaseTrainer):
             self.writer.add_scalar('Loss/train', train_loss, ep)
             self.writer.add_scalar('LRate/train', lr_scheduler.get_last_lr()[0], ep)
             lr_scheduler.step()
+            
+            if val_loader:
+                val_loss = self._evaluate(model, criterion, val_loader)
+                self.writer.add_scalar('Loss/val', val_loss, ep)
 
-            if ep % save_period == 0:
-                if val_loader:
-                    val_loss = self._evaluate(model, criterion, val_loader)
-                    self.writer.add_scalar('Loss/val', val_loss, ep)
+                if ep % save_period == 0:
                     early_stopping(val_loss, model, optimizer, ep, lr_scheduler.get_last_lr())
                     if early_stopping.early_stop:
                         logging.info(f"Early stopping at epoch {ep}.")
                         break
-                else:
-                    self._save_ckpt(model, ckpt_name=f'epoch{ep}')
 
     def _train_one_epoch(self, model, optimizer, criterion, dataloader):
         model.train().to(self.device)
