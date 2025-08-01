@@ -58,8 +58,8 @@ class BaseTrainer:
     def _save_ckpt(self, model, ckpt_name):
         ckpt_dir = Path(self.path) / 'ckpt'
         ckpt_dir.mkdir(parents=True, exist_ok=True)
-        torch.save({'params': model.state_dict()}, ckpt_dir / ckpt_name)
-        logging.info(f'Model checkpoint saved: {ckpt_name}')
+        torch.save({'params': model.state_dict()}, ckpt_dir / f'{ckpt_name}.pth')
+        logging.info(f'Model checkpoint saved: {ckpt_name}.pth')
 
     def _load_ckpt(self, ckpt_name, device):
         ckpt_path = Path(self.path) / 'ckpt' / ckpt_name
