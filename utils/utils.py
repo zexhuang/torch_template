@@ -38,10 +38,10 @@ class EarlyStopping:
         checkpoint = {
             'epoch': epoch,
             'loss': loss,
-            'model_state_dict': model_state,
-            'optimizer_state_dict': optimizer_state,
+            'params': model_state,
+            'optimizer': optimizer_state,
             'lr': last_lr[0],
-            'confusion_matrix': cm
+            'cm': cm
         }
     
         if self.best_score is None:
