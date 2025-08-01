@@ -1,6 +1,7 @@
 import torch
 from pathlib import Path
 
+
 # Code adapoted from https://github.com/Bjarten/early-stopping-pytorch
 class EarlyStopping:
     """Early stops the training if validation monitor doesn't improve after a given patience."""
@@ -8,7 +9,7 @@ class EarlyStopping:
         """
         Args:
             path (str): Path for the checkpoint to be saved to.
-            best_score (flaot or none): Value of metric of the best model.
+            best_score (float or none): Value of metric of the best model.
                             Default: None
             patience (int): How long to wait after last time validation loss improved.
                             Default: 10
@@ -32,38 +33,51 @@ class EarlyStopping:
     def __call__(self, loss, model, optimizer, epoch, last_lr, cm=None):
         score = loss 
         
-        model_state = model.state_dict()
-        optimizer_state = optimizer.state_dict()
-        
         checkpoint = {
             'epoch': epoch,
             'loss': loss,
-            'params': model_state,
-            'optimizer': optimizer_state,
+            'params': model.state_dict(),
+            'optimizer': optimizer.state_dict(),
             'lr': last_lr[0],
             'cm': cm
         }
     
         if self.best_score is None:
             self.best_score = score
+            if self.verbose:
+                self.trace_func(
+                    f"\n[EarlyStopping] Initializing best score.\n"
+                    f"    Starting Score: {score:.6f}\n"
+                    f"    Saving initial checkpoint to: {self.path / 'ckpt' / 'best_val_epoch.pth'}\n"
+                )
             self.save_checkpoint(checkpoint, score)
+            
         elif score > self.best_score + self.delta:
             self.counter += 1
-            self.trace_func(f'\n Validation loss does not improve ({self.best_score} --> {score}). \n EarlyStopping counter: {self.counter} out of {self.patience}')
+            if self.verbose:
+                self.trace_func(
+                    f"\n[EarlyStopping] Validation loss did not improve.\n"
+                    f"    Best Score     : {self.best_score:.6f}\n"
+                    f"    Current Score  : {score:.6f}\n"
+                    f"    Delta Threshold: {self.delta}\n"
+                    f"    Counter        : {self.counter} / {self.patience}\n"
+                )
             if self.counter >= self.patience:
                 self.early_stop = True
         else:
-            self.best_score = score
+            if self.verbose:
+                self.trace_func(
+                    f"\n[EarlyStopping] Validation loss improved!\n"
+                    f"    Previous Best : {self.best_score:.6f}\n"
+                    f"    New Best      : {loss:.6f}\n"
+                    f"    Saving checkpoint to: {self.path / 'ckpt' / 'best_val_epoch.pth'}\n"
+                )
             self.save_checkpoint(checkpoint, score)
             self.counter = 0
 
     def save_checkpoint(self, checkpoint, loss):
         '''Saves model when validation loss decrease.'''
-        if self.verbose:
-            self.trace_func(f'\n Validation loss decrease ({self.best_score:.6f} --> {loss:.6f}). \n Saving model ...')
-            
         checkpoint_path = self.path / 'ckpt'
         checkpoint_path.mkdir(parents=True, exist_ok=True)
         torch.save(checkpoint, checkpoint_path.joinpath('best_val_epoch.pth'))
-        
         self.best_score = loss
