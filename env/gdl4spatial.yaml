@@ -1,44 +1,50 @@
-name: gdl4spatial
+name: gdl
 channels:
   - nvidia
   - pytorch
   - pyg
-  - pytorch3d
   - conda-forge
+  - defaults
 dependencies:
-  - python=3.9
-  - ipykernel
-  - pytorch::pytorch
-  - pytorch::torchvision
-  - pytorch::torchaudio
-  - pytorch::pytorch-cuda=12.1
-  - pyg::pyg 
-  - pyg::pytorch-scatter
-  - pyg::pytorch-cluster
-  - pyg::pytorch-sparse
-  - pyg::pytorch-spline-conv
-  - pytorch3d::pytorch3d
+  - python=3.10
+  - pytorch
+  - torchvision
+  - torchaudio
+  - pytorch-cuda=12.1
+  - pyg
+  - pytorch-scatter
+  - pytorch-cluster
+  - pytorch-sparse
+  - pytorch-spline-conv
   - torchinfo
   - torchmetrics
-  - tensorboard
-  - numba
+  - ipykernel
   - scipy
   - scikit-learn
   - seaborn
-  - gdal
-  - pdal
-  - python-pdal
   - pandas
   - geopandas
   - shapely
+  - gdal
+  - pdal
+  - python-pdal
   - rasterio
   - rioxarray
   - rio-tiler
-  - gemgis
+  - trimesh
+  - pymeshlab
   - pyvista
-  - cmake
-  - pyyaml
   - plyfile
-  - laspy
-  - lazrs-python
-  - h5py
+  - pyyaml
+  - pycocotools
+  - tensorboard
+  - pip
+  - pip:
+      - datasets
+      - transformers
+      - tokenizers
+      - laspy
+      - lazrs
+      - startinpy
+      - fast-simplification
+      - "git+https://github.com/facebookresearch/pytorch3d.git"
