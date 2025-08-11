@@ -73,15 +73,27 @@ class Trainer(BaseTrainer):
             train_loader: Optional[DataLoader] = None,
             val_loader: Optional[DataLoader] = None,
             ckpt: Union[str, Path, None] = None,
-            save_period: int = 10):
+            save_period: int = 10,
+            optimizer: Optional[torch.optim.Optimizer] = None):
 
         summary(model, depth=3)
         if ckpt:
             model.load_state_dict(self._load_ckpt(ckpt, self.device)['params'])
 
         criterion = criterion or torch.nn.CrossEntropyLoss()
-        optimizer = torch.optim.AdamW(model.parameters(), lr=self.lr, weight_decay=self.w_decay)
-        lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=self.epoch, eta_min=1e-5)
+        
+        if optimizer is None:
+            optimizer = torch.optim.AdamW(
+                model.parameters(),
+                lr=self.lr,
+                weight_decay=self.w_decay
+            )
+
+        lr_scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+            optimizer,
+            T_max=self.epoch,
+            eta_min=1e-5
+        )
 
         self.writer = SummaryWriter(log_dir=f'{self.path}/runs')
         early_stopping = EarlyStopping(path=self.path, patience=self.patience)
