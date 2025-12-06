@@ -7,6 +7,7 @@ channels:
   - defaults
 dependencies:
   - python=3.10
+  - numba
   - pytorch
   - torchvision
   - torchaudio
@@ -28,6 +29,9 @@ dependencies:
   - gdal
   - pdal
   - python-pdal
+  - pysal
+  - momepy
+  - osmnx
   - rasterio
   - rioxarray
   - rio-tiler
@@ -40,6 +44,7 @@ dependencies:
   - tensorboard
   - pip
   - pip:
+      - wandb
       - open3d
       - datasets
       - transformers
