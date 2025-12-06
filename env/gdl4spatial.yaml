@@ -1,56 +1,107 @@
 name: gdl4spatial
 channels:
-  - nvidia
-  - pytorch
-  - pyg
   - conda-forge
   - defaults
 dependencies:
+  # --- Core Python ---
   - python=3.10
-  - numba
-  - pytorch
-  - torchvision
-  - torchaudio
-  - pytorch-cuda=12.1
-  - pyg
-  - pytorch-scatter
-  - pytorch-cluster
-  - pytorch-sparse
-  - pytorch-spline-conv
-  - torchinfo
-  - torchmetrics
-  - ipykernel
-  - scipy
-  - scikit-learn
-  - seaborn
-  - pandas
-  - geopandas
-  - shapely
+  - cmake=3.27
+
+  # --- Geospatial Core (C++ Libs included) ---
   - gdal
   - pdal
   - python-pdal
+  - geopandas
+  - shapely            
+  - fiona
+  - pyproj
+  - rtree
   - pysal
   - momepy
+  - spopt
   - osmnx
   - rasterio
   - rioxarray
   - rio-tiler
+  - xarray-spatial
+  - geocube
+  - stackstac
+
+  # --- Geo Vis ---
+  - folium
+  - mapclassify
+  - contextily
+  - datashader
+  - geoplot
+  - matplotlib          
+
+  # --- Scientific & Data ---
+  - numba
+  - scipy
+  - scikit-learn
+  - seaborn
+  - pandas
+  - ipykernel
+  - pyyaml
+  - pycocotools
+  - tqdm                
+
+  # --- 3D Processing ---
   - trimesh
   - pymeshlab
   - pyvista
   - plyfile
-  - pyyaml
-  - pycocotools
-  - tensorboard
+  - open3d
+
+  # --- Pip Fallback ---
   - pip
   - pip:
+      # --- Index Options ---
+      - "--extra-index-url https://download.pytorch.org/whl/cu124"
+      - "--extra-index-url https://data.dgl.ai/wheels/cu124/repo.html"
+      - "--find-links https://data.pyg.org/whl/torch-2.5.1+cu124.html"
+
+      # --- PyTorch Core (Pinned) ---
+      - torch==2.5.1
+      - torchvision
+      - torchaudio
+
+      # --- GDL ---
+      # PyG
+      - torch_geometric
+      - pyg_lib
+      - torch_scatter
+      - torch_sparse
+      - torch_cluster
+      - torch_spline_conv
+      # DGL
+      - dgl
+
+      # --- TDA ---
+      - gudhi
+      - giotto-tda
+      - ripserplusplus
+      - torch_topological
+      - tadasets
+      - toponetx
+      - persim
+
+      # --- ML Ops & Config ---
       - wandb
-      - open3d
+      - tensorboard
+      - torchinfo
+      - torchmetrics
+      - lightning
+      - accelerate
+      - hydra-core          # Added for experiment config management
+
+      # --- HuggingFace ---
       - datasets
       - transformers
       - tokenizers
+
+      # --- Point Cloud Tools ---
       - laspy
       - lazrs
       - startinpy
       - fast-simplification
-      - "git+https://github.com/facebookresearch/pytorch3d.git"
