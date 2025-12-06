@@ -1,4 +1,4 @@
-name: gdl
+name: gdl4spatial
 channels:
   - nvidia
   - pytorch
