@@ -57,15 +57,17 @@ dependencies:
   - pip
   - pip:
       # --- Index Options ---
-      - "--extra-index-url https://download.pytorch.org/whl/cu124"
-      - "--extra-index-url https://data.dgl.ai/wheels/cu124/repo.html"
-      - "--find-links https://data.pyg.org/whl/torch-2.5.1+cu124.html"
+      # - "--extra-index-url https://download.pytorch.org/whl/cu124"
+      # - "--extra-index-url https://data.dgl.ai/wheels/cu124/repo.html"
+      # - "--find-links https://data.pyg.org/whl/torch-2.5.1+cu124.html"
 
       # --- PyTorch Core (Pinned) ---
       - torch==2.5.1
       - torchvision
       - torchaudio
       - torchgeo
+      - torchinfo
+      - torchmetrics
 
       # --- GDL ---
       # PyG
@@ -89,11 +91,9 @@ dependencies:
       # --- ML Ops & Config ---
       - wandb
       - tensorboard
-      - torchinfo
-      - torchmetrics
       - lightning
       - accelerate
-      - hydra-core          # Added for experiment config management
+      - hydra-core          
 
       # --- HuggingFace ---
       - datasets
