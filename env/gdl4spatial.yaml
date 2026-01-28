@@ -65,6 +65,7 @@ dependencies:
       - torch==2.5.1
       - torchvision
       - torchaudio
+      - torchgeo
 
       # --- GDL ---
       # PyG
