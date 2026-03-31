@@ -1,10 +1,10 @@
-name: gdl4spatial
+name: geoai
 channels:
   - conda-forge
   - defaults
 dependencies:
   # --- Core Python ---
-  - python=3.10
+  - python=3.12
   - cmake=3.27
 
   # --- Geospatial Core (C++ Libs included) ---
@@ -20,6 +20,7 @@ dependencies:
   - momepy
   - spopt
   - osmnx
+  - city2graph
   - rasterio
   - rioxarray
   - rio-tiler
@@ -57,12 +58,11 @@ dependencies:
   - pip
   - pip:
       # --- Index Options ---
-      # - "--extra-index-url https://download.pytorch.org/whl/cu124"
-      # - "--extra-index-url https://data.dgl.ai/wheels/cu124/repo.html"
-      # - "--find-links https://data.pyg.org/whl/torch-2.5.1+cu124.html"
+      - "--extra-index-url https://download.pytorch.org/whl/cu126"
+      - "--find-links https://data.pyg.org/whl/torch-2.8.0+cu126.html"
 
       # --- PyTorch Core (Pinned) ---
-      - torch==2.5.1
+      - torch==2.8.0
       - torchvision
       - torchaudio
       - torchgeo
@@ -77,8 +77,6 @@ dependencies:
       - torch_sparse
       - torch_cluster
       - torch_spline_conv
-      # DGL
-      - dgl
 
       # --- TDA ---
       - gudhi
