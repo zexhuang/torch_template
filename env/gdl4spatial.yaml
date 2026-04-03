@@ -4,23 +4,36 @@ channels:
   - defaults
 dependencies:
   # --- Core Python ---
-  - python=3.12
+  - python=3.11
   - cmake=3.27
 
-  # --- Geospatial Core (C++ Libs included) ---
+  # --- Scientific & Data ---           
+  - scikit-learn
+  - numba                      
+  - scipy
+  - pandas
+  - jupyterlab
+  - ipykernel
+  - ipywidgets
+  - pyyaml
+  - pycocotools
+  - tqdm    
+
+  # --- Geospatial Core (Strictly Conda: Heavy C++) ---
   - gdal
   - pdal
   - python-pdal
   - geopandas
-  - shapely            
+  - shapely           
   - fiona
   - pyproj
   - rtree
+  - h3-py
   - pysal
+  - esda
   - momepy
   - spopt
   - osmnx
-  - city2graph
   - rasterio
   - rioxarray
   - rio-tiler
@@ -28,77 +41,59 @@ dependencies:
   - geocube
   - stackstac
 
-  # --- Geo Vis ---
-  - folium
-  - mapclassify
-  - contextily
-  - datashader
-  - geoplot
-  - matplotlib          
-
-  # --- Scientific & Data ---
-  - numba
-  - scipy
-  - scikit-learn
-  - seaborn
-  - pandas
-  - ipykernel
-  - pyyaml
-  - pycocotools
-  - tqdm                
-
-  # --- 3D Processing ---
+  # --- 3D Processing & Visualization ---
   - trimesh
   - pymeshlab
   - pyvista
+  - trame
   - plyfile
   - open3d
+  - matplotlib
+  - seaborn
+  - folium        
 
-  # --- Pip Fallback ---
+  # --- Pip Managed ---
   - pip
   - pip:
-      # --- Index Options ---
-      - "--extra-index-url https://download.pytorch.org/whl/cu126"
-      - "--find-links https://data.pyg.org/whl/torch-2.8.0+cu126.html"
-
-      # --- PyTorch Core (Pinned) ---
-      - torch==2.8.0
+      # --- PyTorch Ecosystem (CUDA 12.8) ---
+      - "--extra-index-url https://download.pytorch.org/whl/cu128"
+      - torch==2.10.0
       - torchvision
       - torchaudio
-      - torchgeo
       - torchinfo
+      - torchgeo
       - torchmetrics
+      - lightning
 
-      # --- GDL ---
-      # PyG
+      # --- PyG Core & C++ Extensions ---
+      - "--find-links https://data.pyg.org/whl/torch-2.10.0+cu128.html"
       - torch_geometric
       - pyg_lib
       - torch_scatter
       - torch_sparse
       - torch_cluster
-      - torch_spline_conv
 
-      # --- TDA ---
-      - gudhi
-      - giotto-tda
-      - torch_topological
-      - tadasets
-      - toponetx
-      - persim
-
-      # --- ML Ops & Config ---
+      # --- HuggingFace & ML Ops ---
+      - accelerate
+      - einops
       - wandb
       - tensorboard
-      - lightning
-      - accelerate
-      - hydra-core          
-
-      # --- HuggingFace ---
       - datasets
       - transformers
       - tokenizers
-
-      # --- Point Cloud Tools ---
+      - hydra-core
+      - kornia
+      
+      # --- Pip Libs ---
+      - city2graph
+      - TorchSpatial
+      - giotto-tda
+      - topomodelx
+      - torch_topological
+      - tadasets
+      - toponetx
+      - gudhi
+      - persim
       - laspy
       - lazrs
       - startinpy
