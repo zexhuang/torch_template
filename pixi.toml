@@ -1,0 +1,115 @@
+[workspace]
+name = "geoai"
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[system-requirements]
+# Forces conda-forge to resolve GPU-aware binaries where applicable
+cuda = "12.8"
+
+[tasks]
+# Custom shortcuts you can run via `pixi run <task_name>`
+jupyter = "lab"
+
+[dependencies]
+# --- Core Python & Scientific ---
+python = "3.12.*"
+cmake = "3.27.*"
+scikit-learn = "*"
+numba = "*"
+scipy = "*"
+pandas = "*"
+jupyterlab = "*"
+ipykernel = "*"
+ipywidgets = "*"
+pyyaml = "*"
+pycocotools = "*"
+tqdm = "*"
+
+# --- Geospatial Core (Heavy C++) ---
+gdal = "*"
+pdal = "*"
+python-pdal = "*"
+geopandas = "*"
+shapely = "*"
+fiona = "*"
+pyproj = "*"
+rtree = "*"
+h3-py = "*"
+pysal = "*"
+esda = "*"
+momepy = "*"
+spopt = "*"
+osmnx = "*"
+rasterio = "*"
+rioxarray = "*"
+rio-tiler = "*"
+xarray-spatial = "*"
+geocube = "*"
+stackstac = "*"
+
+# --- 3D Processing & Visualization ---
+trimesh = "*"
+pymeshlab = "*"
+pyvista = "*"
+trame = "*"
+plyfile = "*"
+open3d = "*"
+matplotlib = "*"
+seaborn = "*"
+folium = "*"
+
+[pypi-dependencies]
+# --- PyTorch Core ---
+torch = "*"
+torchvision = "*"
+torchaudio = "*"
+
+# --- ML Ops & HuggingFace ---
+lightning = "*"
+torchinfo = "*"
+torchmetrics = "*"
+accelerate = "*"
+einops = "*"
+wandb = "*"
+tensorboard = "*"
+hydra-core = "*"
+torchgeo = "*"
+rs-embed = "*"
+kornia = "*"
+datasets = "*"
+transformers = "*"
+tokenizers = "*"
+
+# --- TDA & Spatial Geometry ---
+city2graph = "*"
+torch_topological = "*"
+tadasets = "*"
+toponetx = "*"
+gudhi = "*"
+ripser =  "*"
+persim = "*"
+laspy = "*"
+lazrs = "*"
+startinpy = "*"
+fast-simplification = "*"
+
+# --- PyG Extensions ---
+torch_geometric = "*"
+pyg_lib = "*"
+torch_scatter = "*"
+torch_sparse = "*"
+torch_cluster = "*"
+
+# --- LLMs & Agents ---
+ollama = "*"
+langgraph = "*"
+langchain = "*"
+deepagents  = "*"
+
+[pypi-options]
+extra-index-urls = [
+    "https://download.pytorch.org/whl/cu128",
+    "https://pypi.org/simple"
+]
+find-links = [{url = "https://data.pyg.org/whl/torch-2.10.0+cu128.html"}, {path = "./.pixi/nvidia_whl"}]
