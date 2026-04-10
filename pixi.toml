@@ -15,6 +15,9 @@ jupyter = "lab"
 # --- Core Python & Scientific ---
 python = "3.12.*"
 cmake = "3.27.*"
+pytorch = "*"
+torchvision = "*"
+torchaudio = "*"
 scikit-learn = "*"
 numba = "*"
 scipy = "*"
@@ -60,11 +63,6 @@ seaborn = "*"
 folium = "*"
 
 [pypi-dependencies]
-# --- PyTorch Core ---
-torch = "*"
-torchvision = "*"
-torchaudio = "*"
-
 # --- ML Ops & HuggingFace ---
 lightning = "*"
 torchinfo = "*"
@@ -108,8 +106,5 @@ langchain = "*"
 deepagents  = "*"
 
 [pypi-options]
-extra-index-urls = [
-    "https://download.pytorch.org/whl/cu128",
-    "https://pypi.org/simple"
-]
-find-links = [{url = "https://data.pyg.org/whl/torch-2.10.0+cu128.html"}, {path = "./.pixi/nvidia_whl"}]
+extra-index-urls = ["https://pypi.org/simple"]
+find-links = [{url = "https://data.pyg.org/whl/torch-2.10.0+cu128.html"}]
