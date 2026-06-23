@@ -15,10 +15,10 @@ jupyter = "lab"
 # --- Core Python & Scientific ---
 python = "3.12.*"
 cmake = "3.27.*"
-pytorch = "*"
-torchvision = "*"
-torchaudio = "*"
-pytorch3d = "*"
+pytorch = { version = "*", build = "cuda*" }
+torchvision = { version = "*", build = "cuda*" }
+torchaudio = { version = "*", build = "cuda*" }
+pytorch3d = { version = "*", build = "cuda*" }
 scikit-learn = "*"
 numba = "*"
 scipy = "*"
@@ -29,6 +29,9 @@ ipywidgets = "*"
 pyyaml = "*"
 pycocotools = "*"
 tqdm = "*"
+docutils = ">=0.20,<0.22"
+pytest = "*"
+botocore = "*"
 
 # --- Geospatial Core (Heavy C++) ---
 gdal = "*"
@@ -51,6 +54,8 @@ rio-tiler = "*"
 xarray-spatial = "*"
 geocube = "*"
 stackstac = "*"
+rio-cogeo = "*"
+pyrosm = "*"
 
 # --- 3D Processing & Visualization ---
 trimesh = "*"
@@ -76,10 +81,12 @@ tensorboard = "*"
 hydra-core = "*"
 torchgeo = "*"
 rs-embed = "*"
+geotessera = ">=0.9.0"
 kornia = "*"
 datasets = "*"
 transformers = "*"
 tokenizers = "*"
+eurostat = "*"
 
 # --- TDA & Spatial Geometry ---
 city2graph = "*"
